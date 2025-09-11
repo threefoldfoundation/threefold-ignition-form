@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface FormData {
   firstName: string;
@@ -258,7 +260,7 @@ const QuestionStep: React.FC<StepProps & {
   </div>
 );
 
-const CommunityStep: React.FC<StepProps> = ({ onNext, onBack }) => (
+const CommunityStep: React.FC<StepProps & { isSubmitting?: boolean }> = ({ onNext, onBack, isSubmitting }) => (
   <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
     <Card className="w-full max-w-lg shadow-card bg-gradient-subtle border-border">
       <CardContent className="p-8 text-center space-y-6">
@@ -292,8 +294,12 @@ const CommunityStep: React.FC<StepProps> = ({ onNext, onBack }) => (
               Back
             </Button>
           )}
-          <Button onClick={onNext} className="flex-1 gradient-primary shadow-glow">
-            Submit
+          <Button 
+            onClick={onNext} 
+            className="flex-1 gradient-primary shadow-glow"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
             <CheckCircle className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -323,6 +329,8 @@ const ThankYouStep: React.FC<{ onReturnHome: () => void }> = ({ onReturnHome }) 
 
 export const ThreeFoldForm: React.FC = () => {
   const [step, setStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -332,6 +340,48 @@ export const ThreeFoldForm: React.FC = () => {
     stayInformed: null,
     newsletter: null,
   });
+
+  const handleSubmitForm = async () => {
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('user_responses')
+        .insert({
+          full_name: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
+          interests: [
+            formData.region,
+            ...(formData.preRegister ? ['pre-register'] : []),
+            ...(formData.stayInformed ? ['stay-informed'] : []),
+            ...(formData.newsletter ? ['newsletter'] : [])
+          ].filter(Boolean)
+        });
+
+      if (error) {
+        console.error('Error submitting form:', error);
+        toast({
+          title: "Error",
+          description: "Failed to submit form. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success!",
+          description: "Your information has been submitted successfully.",
+        });
+        setStep(9);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit form. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const steps = [
     () => <LandingStep onNext={() => setStep(1)} />,
@@ -401,12 +451,9 @@ export const ThreeFoldForm: React.FC = () => {
       <CommunityStep
         formData={formData}
         setFormData={setFormData}
-        onNext={() => {
-          // Here you would submit the form data
-          console.log("Form submitted:", formData);
-          setStep(9);
-        }}
+        onNext={() => handleSubmitForm()}
         onBack={() => setStep(7)}
+        isSubmitting={isSubmitting}
       />
     ),
     () => <ThankYouStep onReturnHome={() => setStep(0)} />,
