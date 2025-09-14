@@ -344,7 +344,8 @@ export const ThreeFoldForm: React.FC = () => {
   const handleSubmitForm = async () => {
     setIsSubmitting(true);
     try {
-      const { error } = await supabase
+      // Save to database
+      const { error: dbError } = await supabase
         .from('user_responses')
         .insert({
           full_name: `${formData.firstName} ${formData.lastName}`.trim(),
@@ -357,20 +358,45 @@ export const ThreeFoldForm: React.FC = () => {
           ].filter(Boolean)
         });
 
-      if (error) {
-        console.error('Error submitting form:', error);
+      if (dbError) {
+        console.error('Error submitting form:', dbError);
         toast({
           title: "Error",
           description: "Failed to submit form. Please try again.",
           variant: "destructive",
         });
+        return;
+      }
+
+      // Send emails
+      const { error: emailError } = await supabase.functions.invoke('send-emails', {
+        body: {
+          fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
+          interests: [
+            formData.region,
+            ...(formData.preRegister ? ['pre-register'] : []),
+            ...(formData.stayInformed ? ['stay-informed'] : []),
+            ...(formData.newsletter ? ['newsletter'] : [])
+          ].filter(Boolean)
+        }
+      });
+
+      if (emailError) {
+        console.error('Error sending emails:', emailError);
+        // Still show success since data was saved, but mention email issue
+        toast({
+          title: "Submitted Successfully",
+          description: "Your information was saved, but there was an issue sending confirmation emails.",
+        });
       } else {
         toast({
           title: "Success!",
-          description: "Your information has been submitted successfully.",
+          description: "Your information has been submitted and confirmation emails have been sent.",
         });
-        setStep(9);
       }
+      
+      setStep(9);
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
