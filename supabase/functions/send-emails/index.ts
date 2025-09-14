@@ -59,7 +59,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send notification email to the website owner
     const ownerEmailResponse = await resend.emails.send({
       from: "ThreeFold Forms <onboarding@resend.dev>",
-      to: ["admin@threefold.io"], // Replace with actual owner email
+      to: ["hassane@incubaid.com"],
       subject: "New ThreeFold Form Submission",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
