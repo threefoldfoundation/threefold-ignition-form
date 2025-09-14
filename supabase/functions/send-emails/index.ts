@@ -28,7 +28,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to the user
     const userEmailResponse = await resend.emails.send({
-      from: "ThreeFold <onboarding@resend.dev>",
+      from: "ThreeFold <noreply@updatees.codescalers.com>",
       to: [email],
       subject: "Thank you for your interest in ThreeFold!",
       html: `
@@ -58,7 +58,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send notification email to the website owner
     const ownerEmailResponse = await resend.emails.send({
-      from: "ThreeFold Forms <onboarding@resend.dev>",
+      from: "ThreeFold Forms <noreply@updatees.codescalers.com>",
       to: ["hassane@incubaid.com"],
       subject: "New ThreeFold Form Submission",
       html: `
