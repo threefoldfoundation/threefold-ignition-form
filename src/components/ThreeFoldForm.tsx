@@ -30,7 +30,7 @@ const LandingStep: React.FC<{ onNext: () => void }> = ({ onNext }) => (
       <CardContent className="p-12 text-center">
         <div className="mb-8">
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-slide-up">
-            Join the ThreeFold ecosystem!
+            Join the ThreeFold Ecosystem!
           </h1>
           <p className="text-xl text-muted-foreground animate-slide-up" style={{ animationDelay: '0.1s' }}>
             Take action with 3Phone, 3Browser, or support our mission and stay updated.
