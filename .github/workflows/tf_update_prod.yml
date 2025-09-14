@@ -1,0 +1,24 @@
+name: signup.threefold.io
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  job_one:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: pushing latest change on signup.threefold.io
+      uses: appleboy/ssh-action@master
+      with:
+        host: signup.threefold.io
+        username: ${{ secrets.TF_USER }}
+        key: ${{ secrets.TF_SECRET }}
+        port: ${{ secrets.TF_PORT }}
+        script: |
+          cd /home/webuser/websites/threefold-ignition-form/dist
+          git log -1
+          git fetch
+          git reset --hard origin/main
+          npm install 
+          npm run build
