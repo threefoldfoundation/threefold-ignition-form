@@ -32,8 +32,9 @@ const LandingStep: React.FC<{ onNext: () => void }> = ({ onNext }) => (
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-slide-up">
             Join the ThreeFold Ecosystem!
           </h1>
+          <p class="font-normal text-lg text-muted-foreground animate-slide-up mb-4">Let's tell the story of our new Internet, together</p>
           <p className="text-xl text-muted-foreground animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            Take action with 3Phone, 3Browser, or support our mission and stay updated.
+            Take action with 3Node, 3Phone, 3Router, or support our mission and stay updated through our newsletter and various online platforms.
           </p>
         </div>
         <Button 
@@ -75,7 +76,7 @@ const PersonalInfoStep: React.FC<StepProps> = ({ formData, setFormData, onNext, 
         <CardContent className="space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="firstName">First Name</Label>
+              <Label htmlFor="firstName">First Name *</Label>
               <Input
                 id="firstName"
                 value={formData.firstName}
@@ -85,7 +86,7 @@ const PersonalInfoStep: React.FC<StepProps> = ({ formData, setFormData, onNext, 
               {errors.firstName && <p className="text-destructive text-sm mt-1">{errors.firstName}</p>}
             </div>
             <div>
-              <Label htmlFor="lastName">Last Name</Label>
+              <Label htmlFor="lastName">Last Name *</Label>
               <Input
                 id="lastName"
                 value={formData.lastName}
@@ -95,7 +96,7 @@ const PersonalInfoStep: React.FC<StepProps> = ({ formData, setFormData, onNext, 
               {errors.lastName && <p className="text-destructive text-sm mt-1">{errors.lastName}</p>}
             </div>
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Email *</Label>
               <Input
                 id="email"
                 type="email"
@@ -128,9 +129,9 @@ const IntroductionStep: React.FC<StepProps> = ({ onNext, onBack }) => (
   <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
     <Card className="w-full max-w-lg shadow-card bg-gradient-subtle border-border">
       <CardContent className="p-8 text-center space-y-6">
-        <h2 className="text-2xl font-semibold">Let's find out what you're interested in.</h2>
+        <h2 className="text-2xl font-semibold">Let's find out what you're interested in!</h2>
         <p className="text-muted-foreground text-lg">
-          We'll walk you through a couple of quick questions.
+          We'll walk you through a series of questions. Don't worry, this won't take long.
         </p>
         <div className="flex gap-3 pt-4">
           {onBack && (
