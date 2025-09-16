@@ -154,7 +154,8 @@ const RegionStep: React.FC<StepProps> = ({ formData, setFormData, onNext, onBack
   <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
     <Card className="w-full max-w-lg shadow-card bg-gradient-subtle border-border">
       <CardContent className="p-8 text-center space-y-6">
-        <h2 className="text-2xl font-semibold">Please select your preferred delivery region for your 3Phone.</h2>
+        <h2 className="text-2xl font-semibold">Please select your preferred delivery region for your 3NodeThis *</h2>
+        <p className="text-muted-foreground text-lg">This allows us to know which vendor to point you towards.</p>
         <div className="space-y-3">
           <Button
             onClick={() => {
@@ -195,11 +196,11 @@ const ConditionalMessageStep: React.FC<StepProps> = ({ formData, onNext, onBack 
     <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
       <Card className="w-full max-w-lg shadow-card bg-gradient-subtle border-border">
         <CardContent className="p-8 text-center space-y-6">
-          <h2 className="text-2xl font-semibold">Thank you for your interest in 3Phone!</h2>
+          <h2 className="text-2xl font-semibold">Thank you for your interest in 3Node!</h2>
           <p className="text-muted-foreground text-lg">
             {isEurope 
-              ? "For customers in Europe / Worldwide, we invite you to contact info@threefold.io."
-              : "For customers in North America, you can place your order with DualCam Era."
+              ? "For customers in Europe /  Worldwide, we invite you to reach out to hello@yourdata.network and they will provide you with more information."
+              : "For customers in North America, you can place your order with Duck Farm Data. Please visit their website."
             }
           </p>
           <div className="flex gap-3 pt-4">
