@@ -15,6 +15,7 @@ interface FormData {
   wantsNode: boolean | null;
   preRegister: boolean | null;
   stayInformed: boolean | null;
+  routerPreregister: boolean | null;
   newsletter: boolean | null;
 }
 
@@ -265,7 +266,7 @@ const ConditionalMessageStep: React.FC<StepProps> = ({ formData, onNext, onBack 
 
 const QuestionStep: React.FC<StepProps & { 
   question: string;
-  field: 'preRegister' | 'stayInformed' | 'newsletter';
+  field: 'preRegister' | 'stayInformed' | 'newsletter' | 'routerPreregister';
   onYes?: () => void;
   onNo?: () => void;
 }> = ({ formData, setFormData, onNext, onBack, question, field, onYes, onNo }) => (
@@ -281,6 +282,16 @@ const QuestionStep: React.FC<StepProps & {
           {question.includes("Do you want to stay informed about new devices") && (
             <p className="text-muted-foreground text-lg">
               We'll add you to our 3Phone mailing list.
+            </p>
+          )}
+          {question.includes("preregister for the 3Router") && (
+            <p className="text-muted-foreground text-lg">
+              We'll add you to our 3Router mailing list. Once we reach 10,000 preregistrations, production and delivery will start.
+            </p>
+          )}
+          {question.includes("join our general newsletter for project updates") && (
+            <p className="text-muted-foreground text-lg">
+              You can unsubscribe anytime
             </p>
           )}
         <div className="space-y-3">
@@ -428,6 +439,7 @@ export const ThreeFoldForm: React.FC = () => {
     wantsNode: null,
     preRegister: null,
     stayInformed: null,
+    routerPreregister: null,
     newsletter: null,
   });
 
@@ -444,6 +456,7 @@ export const ThreeFoldForm: React.FC = () => {
             formData.region,
             ...(formData.preRegister ? ['pre-register'] : []),
             ...(formData.stayInformed ? ['stay-informed'] : []),
+            ...(formData.routerPreregister ? ['router-preregister'] : []),
             ...(formData.newsletter ? ['newsletter'] : [])
           ].filter(Boolean)
         });
@@ -467,6 +480,7 @@ export const ThreeFoldForm: React.FC = () => {
             formData.region,
             ...(formData.preRegister ? ['pre-register'] : []),
             ...(formData.stayInformed ? ['stay-informed'] : []),
+            ...(formData.routerPreregister ? ['router-preregister'] : []),
             ...(formData.newsletter ? ['newsletter'] : [])
           ].filter(Boolean)
         }
@@ -486,7 +500,7 @@ export const ThreeFoldForm: React.FC = () => {
         });
       }
       
-      setStep(11);
+      setStep(12);
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
@@ -570,6 +584,8 @@ export const ThreeFoldForm: React.FC = () => {
         onBack={() => setStep(6)}
         question="Do you want to stay informed about new devices, software releases, and upcoming features for the 3Phone family?.*"
         field="stayInformed"
+        onYes={() => setStep(9)}
+        onNo={() => setStep(9)}
       />
     ),
     () => (
@@ -578,6 +594,18 @@ export const ThreeFoldForm: React.FC = () => {
         setFormData={setFormData}
         onNext={() => setStep(10)}
         onBack={() => setStep(8)}
+        question="Would you like to preregister for the 3Router?*"
+        field="routerPreregister"
+        onYes={() => setStep(10)}
+        onNo={() => setStep(10)}
+      />
+    ),
+    () => (
+      <QuestionStep
+        formData={formData}
+        setFormData={setFormData}
+        onNext={() => setStep(11)}
+        onBack={() => setStep(9)}
         question="Would you like to join our general newsletter for project updates?"
         field="newsletter"
       />
@@ -587,7 +615,7 @@ export const ThreeFoldForm: React.FC = () => {
         formData={formData}
         setFormData={setFormData}
         onNext={() => handleSubmitForm()}
-        onBack={() => setStep(9)}
+        onBack={() => setStep(10)}
         isSubmitting={isSubmitting}
       />
     ),
