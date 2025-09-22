@@ -197,7 +197,7 @@ const RegionStep: React.FC<StepProps> = ({ formData, setFormData, onNext, onBack
   <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
     <Card className="w-full max-w-lg shadow-card bg-gradient-subtle border-border">
       <CardContent className="p-8 text-center space-y-6">
-        <h2 className="text-2xl font-semibold">Please select your preferred delivery region for your 3NodeThis *</h2>
+        <h2 className="text-2xl font-semibold">Please select your preferred delivery region for your 3NodeThis</h2>
         <p className="text-muted-foreground text-lg">This allows us to know which vendor to point you towards.</p>
         <div className="space-y-3">
           <Button
@@ -584,7 +584,7 @@ export const ThreeFoldForm: React.FC = () => {
         setFormData={setFormData}
         onNext={() => setStep(9)}
         onBack={() => setStep(6)}
-        question="Do you want to stay informed about new devices, software releases, and upcoming features for the 3Phone family?.*"
+        question="Do you want to stay informed about new devices, software releases, and upcoming features for the 3Phone family?"
         field="stayInformed"
         onYes={() => setStep(9)}
         onNo={() => setStep(9)}
@@ -596,7 +596,7 @@ export const ThreeFoldForm: React.FC = () => {
         setFormData={setFormData}
         onNext={() => setStep(10)}
         onBack={() => setStep(8)}
-        question="Would you like to preregister for the 3Router?*"
+        question="Would you like to preregister for the 3Router?"
         field="routerPreregister"
         onYes={() => setStep(10)}
         onNo={() => setStep(10)}
