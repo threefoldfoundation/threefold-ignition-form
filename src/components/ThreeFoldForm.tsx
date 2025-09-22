@@ -266,7 +266,9 @@ const ConditionalMessageStep: React.FC<StepProps> = ({ formData, onNext, onBack 
 const QuestionStep: React.FC<StepProps & { 
   question: string;
   field: 'preRegister' | 'stayInformed' | 'newsletter';
-}> = ({ formData, setFormData, onNext, onBack, question, field }) => (
+  onYes?: () => void;
+  onNo?: () => void;
+}> = ({ formData, setFormData, onNext, onBack, question, field, onYes, onNo }) => (
   <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
     <Card className="w-full max-w-lg shadow-card bg-gradient-subtle border-border">
       <CardContent className="p-8 text-center space-y-6">
@@ -276,11 +278,20 @@ const QuestionStep: React.FC<StepProps & {
               OwnPhone is the first device in the 3Phone Family – developed by YourData Network and powered by ThreeFold. OwnPhone devices are eligible for all future 3Phone software and feature updates, including 3BOT and 3AI.
             </p>
           )}
+          {question.includes("Do you want to stay informed about new devices") && (
+            <p className="text-muted-foreground text-lg">
+              We'll add you to our 3Phone mailing list.
+            </p>
+          )}
         <div className="space-y-3">
           <Button
             onClick={() => {
               setFormData({ ...formData, [field]: true });
-              onNext();
+              if (onYes) {
+                onYes();
+              } else {
+                onNext();
+              }
             }}
             variant="outline"
             className="w-full py-6 text-lg hover:gradient-primary hover:border-primary transition-smooth"
@@ -290,7 +301,11 @@ const QuestionStep: React.FC<StepProps & {
           <Button
             onClick={() => {
               setFormData({ ...formData, [field]: false });
-              onNext();
+              if (onNo) {
+                onNo();
+              } else {
+                onNext();
+              }
             }}
             variant="outline"
             className="w-full py-6 text-lg hover:gradient-primary hover:border-primary transition-smooth"
@@ -304,6 +319,31 @@ const QuestionStep: React.FC<StepProps & {
             Back
           </Button>
         )}
+      </CardContent>
+    </Card>
+  </div>
+);
+
+const ActionStep: React.FC<StepProps> = ({ onNext, onBack }) => (
+  <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
+    <Card className="w-full max-w-lg shadow-card bg-gradient-subtle border-border">
+      <CardContent className="p-8 text-center space-y-6">
+        <h2 className="text-2xl font-semibold">Great, then it's time to take action!</h2>
+        <p className="text-muted-foreground text-lg">
+          Learn more about OwnPhone and pre-order at ownphone.net.
+        </p>
+        <div className="flex gap-3 pt-4">
+          {onBack && (
+            <Button variant="outline" onClick={onBack} className="flex-1">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
+          )}
+          <Button onClick={onNext} className="flex-1 gradient-primary shadow-glow">
+            Next
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       </CardContent>
     </Card>
   </div>
@@ -446,7 +486,7 @@ export const ThreeFoldForm: React.FC = () => {
         });
       }
       
-      setStep(10);
+      setStep(11);
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
@@ -506,20 +546,20 @@ export const ThreeFoldForm: React.FC = () => {
       <QuestionStep
         formData={formData}
         setFormData={setFormData}
-        onNext={() => setStep(7)}
+        onNext={() => setStep(8)}
         onBack={() => setStep(5)}
         question="Would you like to order a 3Phone? This question is required.*"
         field="preRegister"
+        onYes={() => setStep(7)}
+        onNo={() => setStep(8)}
       />
     ),
     () => (
-      <QuestionStep
+      <ActionStep
         formData={formData}
         setFormData={setFormData}
         onNext={() => setStep(8)}
         onBack={() => setStep(6)}
-        question="Would you like to be informed about new devices, software releases, and upcoming initiatives for the 3Phone ecosystem?"
-        field="stayInformed"
       />
     ),
     () => (
@@ -527,7 +567,17 @@ export const ThreeFoldForm: React.FC = () => {
         formData={formData}
         setFormData={setFormData}
         onNext={() => setStep(9)}
-        onBack={() => setStep(7)}
+        onBack={() => setStep(6)}
+        question="Do you want to stay informed about new devices, software releases, and upcoming features for the 3Phone family?.*"
+        field="stayInformed"
+      />
+    ),
+    () => (
+      <QuestionStep
+        formData={formData}
+        setFormData={setFormData}
+        onNext={() => setStep(10)}
+        onBack={() => setStep(8)}
         question="Would you like to join our general newsletter for project updates?"
         field="newsletter"
       />
@@ -537,7 +587,7 @@ export const ThreeFoldForm: React.FC = () => {
         formData={formData}
         setFormData={setFormData}
         onNext={() => handleSubmitForm()}
-        onBack={() => setStep(8)}
+        onBack={() => setStep(9)}
         isSubmitting={isSubmitting}
       />
     ),
