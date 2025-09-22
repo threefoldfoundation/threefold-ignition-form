@@ -12,6 +12,7 @@ interface FormData {
   lastName: string;
   email: string;
   region: string;
+  wantsNode: boolean | null;
   preRegister: boolean | null;
   stayInformed: boolean | null;
   newsletter: boolean | null;
@@ -32,7 +33,7 @@ const LandingStep: React.FC<{ onNext: () => void }> = ({ onNext }) => (
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-slide-up">
             Join the ThreeFold Ecosystem!
           </h1>
-          <p class="font-normal text-lg text-muted-foreground animate-slide-up mb-4">Let's tell the story of our new Internet, together</p>
+          <p className="font-normal text-lg text-muted-foreground animate-slide-up mb-4">Let's tell the story of our new Internet, together</p>
           <p className="text-xl text-muted-foreground animate-slide-up" style={{ animationDelay: '0.1s' }}>
             Take action with 3Node, 3Phone, 3Router, or support our mission and stay updated through our newsletter and various online platforms.
           </p>
@@ -145,6 +146,47 @@ const IntroductionStep: React.FC<StepProps> = ({ onNext, onBack }) => (
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
+      </CardContent>
+    </Card>
+  </div>
+);
+
+const NodeQuestionStep: React.FC<StepProps & { onSkipToPhone: () => void }> = ({ formData, setFormData, onNext, onBack, onSkipToPhone }) => (
+  <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
+    <Card className="w-full max-w-lg shadow-card bg-gradient-subtle border-border">
+      <CardContent className="p-8 text-center space-y-6">
+        <h2 className="text-2xl font-semibold">Would you like to order a 3Node?</h2>
+        <p className="text-muted-foreground text-lg">
+          The backbone of ThreeFold's infrastructure.
+        </p>
+        <div className="space-y-3">
+          <Button
+            onClick={() => {
+              setFormData({ ...formData, wantsNode: true });
+              onNext();
+            }}
+            variant="outline"
+            className="w-full py-6 text-lg hover:gradient-primary hover:border-primary transition-smooth"
+          >
+            Yes
+          </Button>
+          <Button
+            onClick={() => {
+              setFormData({ ...formData, wantsNode: false });
+              onSkipToPhone();
+            }}
+            variant="outline"
+            className="w-full py-6 text-lg hover:gradient-primary hover:border-primary transition-smooth"
+          >
+            No
+          </Button>
+        </div>
+        {onBack && (
+          <Button variant="outline" onClick={onBack} className="mt-6">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
+        )}
       </CardContent>
     </Card>
   </div>
@@ -343,6 +385,7 @@ export const ThreeFoldForm: React.FC = () => {
     lastName: "",
     email: "",
     region: "",
+    wantsNode: null,
     preRegister: null,
     stayInformed: null,
     newsletter: null,
@@ -403,7 +446,7 @@ export const ThreeFoldForm: React.FC = () => {
         });
       }
       
-      setStep(9);
+      setStep(10);
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
@@ -435,15 +478,16 @@ export const ThreeFoldForm: React.FC = () => {
       />
     ),
     () => (
-      <RegionStep
+      <NodeQuestionStep
         formData={formData}
         setFormData={setFormData}
         onNext={() => setStep(4)}
         onBack={() => setStep(2)}
+        onSkipToPhone={() => setStep(6)}
       />
     ),
     () => (
-      <ConditionalMessageStep
+      <RegionStep
         formData={formData}
         setFormData={setFormData}
         onNext={() => setStep(5)}
@@ -451,13 +495,11 @@ export const ThreeFoldForm: React.FC = () => {
       />
     ),
     () => (
-      <QuestionStep
+      <ConditionalMessageStep
         formData={formData}
         setFormData={setFormData}
         onNext={() => setStep(6)}
         onBack={() => setStep(4)}
-        question="Would you like to order a 3Phone? This question is required.*"
-        field="preRegister"
       />
     ),
     () => (
@@ -466,8 +508,8 @@ export const ThreeFoldForm: React.FC = () => {
         setFormData={setFormData}
         onNext={() => setStep(7)}
         onBack={() => setStep(5)}
-        question="Would you like to be informed about new devices, software releases, and upcoming initiatives for the 3Phone ecosystem?"
-        field="stayInformed"
+        question="Would you like to order a 3Phone? This question is required.*"
+        field="preRegister"
       />
     ),
     () => (
@@ -476,6 +518,16 @@ export const ThreeFoldForm: React.FC = () => {
         setFormData={setFormData}
         onNext={() => setStep(8)}
         onBack={() => setStep(6)}
+        question="Would you like to be informed about new devices, software releases, and upcoming initiatives for the 3Phone ecosystem?"
+        field="stayInformed"
+      />
+    ),
+    () => (
+      <QuestionStep
+        formData={formData}
+        setFormData={setFormData}
+        onNext={() => setStep(9)}
+        onBack={() => setStep(7)}
         question="Would you like to join our general newsletter for project updates?"
         field="newsletter"
       />
@@ -485,7 +537,7 @@ export const ThreeFoldForm: React.FC = () => {
         formData={formData}
         setFormData={setFormData}
         onNext={() => handleSubmitForm()}
-        onBack={() => setStep(7)}
+        onBack={() => setStep(8)}
         isSubmitting={isSubmitting}
       />
     ),
