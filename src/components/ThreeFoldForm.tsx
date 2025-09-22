@@ -454,9 +454,10 @@ export const ThreeFoldForm: React.FC = () => {
           email: formData.email,
           interests: [
             formData.region,
-            ...(formData.preRegister ? ['pre-register'] : []),
+            ...(formData.wantsNode ? ['3node'] : []),
+            ...(formData.preRegister ? ['3phone'] : []),
+            ...(formData.routerPreregister ? ['3router'] : []),
             ...(formData.stayInformed ? ['stay-informed'] : []),
-            ...(formData.routerPreregister ? ['router-preregister'] : []),
             ...(formData.newsletter ? ['newsletter'] : [])
           ].filter(Boolean)
         });
@@ -478,9 +479,10 @@ export const ThreeFoldForm: React.FC = () => {
           email: formData.email,
           interests: [
             formData.region,
-            ...(formData.preRegister ? ['pre-register'] : []),
+            ...(formData.wantsNode ? ['3node'] : []),
+            ...(formData.preRegister ? ['3phone'] : []),
+            ...(formData.routerPreregister ? ['3router'] : []),
             ...(formData.stayInformed ? ['stay-informed'] : []),
-            ...(formData.routerPreregister ? ['router-preregister'] : []),
             ...(formData.newsletter ? ['newsletter'] : [])
           ].filter(Boolean)
         }
