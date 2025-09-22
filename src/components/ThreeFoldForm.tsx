@@ -229,6 +229,11 @@ const QuestionStep: React.FC<StepProps & {
     <Card className="w-full max-w-lg shadow-card bg-gradient-subtle border-border">
       <CardContent className="p-8 text-center space-y-6">
         <h2 className="text-2xl font-semibold">{question}</h2>
+          {question === "Would you like to order a 3Phone? This question is required.*" && (
+            <p className="text-muted-foreground text-lg">
+              OwnPhone is the first device in the 3Phone Family – developed by YourData Network and powered by ThreeFold. OwnPhone devices are eligible for all future 3Phone software and feature updates, including 3BOT and 3AI.
+            </p>
+          )}
         <div className="space-y-3">
           <Button
             onClick={() => {
@@ -451,7 +456,7 @@ export const ThreeFoldForm: React.FC = () => {
         setFormData={setFormData}
         onNext={() => setStep(6)}
         onBack={() => setStep(4)}
-        question="Would you like to pre-register for the 3Phone? Pre-registration is required before production starts."
+        question="Would you like to order a 3Phone? This question is required.*"
         field="preRegister"
       />
     ),
