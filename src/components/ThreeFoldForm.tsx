@@ -242,8 +242,20 @@ const ConditionalMessageStep: React.FC<StepProps> = ({ formData, onNext, onBack 
           <h2 className="text-2xl font-semibold">Thank you for your interest in 3Node!</h2>
           <p className="text-muted-foreground text-lg">
             {isEurope 
-              ? "For customers in Europe /  Worldwide, we invite you to reach out to hello@yourdata.network and they will provide you with more information."
-              : "For customers in North America, you can place your order with Duck Farm Data. Please visit their website."
+              ? (
+                <>
+                  For customers in Europe / Worldwide, we invite you to reach out to{" "}
+                  <a 
+                    href="mailto:hello@yourdata.network" 
+                    className="text-primary hover:text-primary/80 underline transition-colors"
+                    target="_blank"
+                  >
+                    hello@yourdata.network
+                  </a>
+                  {" "}and they will provide you with more information.
+                </>
+              )
+              : "For customers in North America, you can place your order with Duck Farm Data. Please visit their website."
             }
           </p>
           <div className="flex gap-3 pt-4">
