@@ -399,6 +399,11 @@ const CommunityStep: React.FC<StepProps & { isSubmitting?: boolean }> = ({ onNex
             </a>
           </Button>
         </div>
+
+
+        <p className="text-muted-foreground text-sm">We use the information you provide to process your request and keep you informed about our products. Your data is securely stored with our service provider Supabase and will not be sold or shared with third parties. You can unsubscribe or request deletion at any time. See our <a href="https://docs.threefold.io/docs/legal/privacy_policy" target="_blank" className="text-primary hover:text-primary/80 underline transition-colors" rel="noopener noreferrer">Privacy Policy</a> for full details.</p>
+        
+        
         <div className="flex gap-3 pt-4">
           {onBack && (
             <Button variant="outline" onClick={onBack} className="flex-1">
