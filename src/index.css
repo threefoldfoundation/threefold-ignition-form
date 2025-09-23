@@ -7,7 +7,7 @@
 @layer base {
   :root {
     /* Dark theme primary colors */
-    --background: 15 15 15; /* rgb(15, 15, 15) */
+    --background: 5 5 5; /* rgb(15, 15, 15) */
     --foreground: 0 0% 98%;
 
     --card: 0 0% 8%;
